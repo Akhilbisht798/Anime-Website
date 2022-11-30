@@ -1,11 +1,11 @@
 import React from "react";
-import Home from "./components/Home";
+import User from "./components/User";
 
 const App = () => {
+
   return (
     <div>
-      This is App.
-      <Home />
+      <User />
     </div>
   )
 }

@@ -26,7 +26,6 @@ const Home = () => {
 
     return (
         <div>
-            {console.log(animeList)}
             {animeList.map((curr) => {
                 return (
                     <div>
