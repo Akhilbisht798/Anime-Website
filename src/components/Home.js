@@ -1,39 +1,34 @@
 import React, { useEffect, useState } from "react";
+import ReactRouter from "./Router";
 
 const Home = () => {
 
-    const [animeList, setAnimeList] = useState([]);
+    const [search, setSearch] = useState("");
 
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': process.env.REACT_APP_ANIME_KEY,
-            'X-RapidAPI-Host': process.env.REACT_APP_ANIME_HOST,
-        }
-    };
+    const Search = async (e) => {
 
-    useEffect(() => {
-        const getAnimeList = async (size, sort, order) => {
-            fetch('https://anime-db.p.rapidapi.com/anime?page=1&size=10&genres=Fantasy%2CDrama&sortBy=ranking&sortOrder=asc', options)
-                .then(response => response.json())
-                .then(response => setAnimeList(response.data))
-                .catch(err => console.error(err));
-        }
-
-        getAnimeList('10', 'ranking', 'asc')
-    }, [])
-
+        e.preventDefault();
+        fetch("https://api.themoviedb.org/3/search/multi?api_key=" +
+            process.env.REACT_APP_MOVIE_DB + "&language=en-US&query=" + search +
+            "&page=1&include_adult=false")
+            .then(response => response.json())
+            .then(response => console.log(response))
+    }
 
     return (
-        <div>
-            {animeList.map((curr) => {
-                return (
-                    <div>
-                        <img src={curr.image} />
-                    </div>
-                )
-            })}
-        </div>
+        <>
+            <div>
+                <form onSubmit={Search}>
+                    <input type="text" placeholder="Search..."
+                        onChange={(e) => { setSearch(e.target.value) }} />
+                    <button type="submit">Submit</button>
+                </form>
+                <a href="/">Home</a>
+                <a href="/rated">Top Rated</a>
+                <a href="/genre">Genre</a>
+            </div>
+            <ReactRouter />
+        </>
     )
 }
 

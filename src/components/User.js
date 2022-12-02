@@ -19,7 +19,8 @@ const User = () => {
                 registerPassword
             );
             await setDoc(doc(db, "users", User.user.uid), {
-                uid: User.user.uid
+                uid: User.user.uid,
+                bio: ""
             })
         } catch (error) {
             console.log(error.message);
