@@ -3,16 +3,14 @@ import React from "react";
 import Rated from "./Home/Rated";
 import Trending from "./Home/trending";
 import Genre from "./Home/genre";
-import Search from "./Home/Search";
 
-const ReactRouter = () => {
+const ReactRouter = (props) => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={< Trending />} />
-                <Route path="/rated" element={<Rated />} />
-                <Route path="/genre" element={<Genre />} />
-                <Route path="/search" element={<Search />} />
+                <Route path="/" element={< Trending selectedMovie={props.selectedMovie} />} />
+                <Route path="/rated" element={<Rated selectedMovie={props.selectedMovie} />} />
+                <Route path="/genre" element={<Genre selectedMovie={props.selectedMovie} />} />
             </Routes>
         </BrowserRouter>
     )

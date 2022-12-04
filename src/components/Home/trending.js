@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Trending = () => {
+const Trending = (props) => {
 
     const [trendingMovie, setTrendingMovie] = useState([]);
     const [trendingTV, setTrendingTV] = useState([]);
@@ -42,8 +42,7 @@ const Trending = () => {
                 <h1>Movies</h1>
                 {trendingMovie.map((curr) => {
                     return (
-                        <div key={curr.id}>
-                            <img src={"https://image.tmdb.org/t/p/w500/" + curr.backdrop_path} />
+                        <div key={curr.id} data-id={curr.id} onClick={(e) => { props.selectedMovie(e, "movie") }}>
                             {curr.title}
                         </div>
                     )
@@ -53,8 +52,7 @@ const Trending = () => {
                 <h1>T.V Shows</h1>
                 {trendingTV.map((curr) => {
                     return (
-                        <div>
-                            <img src={"https://image.tmdb.org/t/p/w500/" + curr.backdrop_path} />
+                        <div key={curr.id} data-id={curr.id} onClick={(e) => { props.selectedMovie(e, "tv") }} >
                             {curr.name}
                         </div>
                     )

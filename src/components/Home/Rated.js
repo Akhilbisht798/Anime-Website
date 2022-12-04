@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Rated = () => {
+const Rated = (props) => {
 
     const [topRatedMovie, setTopRatedMovie] = useState([]);
     const [topRatedTV, setTopRatedTV] = useState([]);
@@ -31,7 +31,7 @@ const Rated = () => {
             <h2>Movies</h2>
             {topRatedMovie.map((curr) => {
                 return (
-                    <div key={curr.id}>
+                    <div key={curr.id} data-id={curr.id} onClick={(e) => { props.selectedMovie(e, "movie") }} >
                         {curr.title}
                     </div>
                 )
@@ -40,7 +40,7 @@ const Rated = () => {
             <h2>T.V. Shows</h2>
             {topRatedTV.map((curr) => {
                 return (
-                    <div key={curr.id}>
+                    <div key={curr.id} data-id={curr.id} onClick={(e) => { props.selectedMovie(e, "tv") }} >
                         {curr.name}
                     </div>
                 )
