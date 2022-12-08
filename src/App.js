@@ -58,6 +58,11 @@ const App = () => {
     return obj.hasOwnProperty("original_title");
   }
 
+  const changeSelectedMovie = (id, show) => {
+    setSelectedMovie({ id: id, movie: show })
+
+  }
+
   const onClickHandle = (e) => {
     const movie = e.target.dataset.show;
     const id = e.target.dataset.id;
@@ -109,7 +114,7 @@ const App = () => {
             })}
           </MovieWrapper>
         </InfiniteScroll> :
-        <Movie data={selectedMovie} close={closeMovie} />
+        <Movie data={selectedMovie} close={closeMovie} changeMovie={changeSelectedMovie} />
       }
     </div>
   )
