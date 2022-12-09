@@ -60,7 +60,6 @@ const App = () => {
 
   const changeSelectedMovie = (id, show) => {
     setSelectedMovie({ id: id, movie: show })
-
   }
 
   const onClickHandle = (e) => {
@@ -70,8 +69,8 @@ const App = () => {
     setOpenMovie(true);
   }
 
-  const closeMovie = () => {
-    setOpenMovie(false);
+  const closeMovie = (bool) => {
+    setOpenMovie(bool);
   }
 
   useEffect(() => {
@@ -80,7 +79,6 @@ const App = () => {
 
   return (
     <div>
-
       {!openMovie ?
         <InfiniteScroll
           dataLength={trendingList.length}

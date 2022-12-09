@@ -88,7 +88,6 @@ const Movie = (props) => {
     const onClickHandle = (e) => {
         const movie = e.target.dataset.show;
         const id = e.target.dataset.id;
-        console.log(id);
         props.changeMovie(id, movie);
     }
 
@@ -102,19 +101,19 @@ const Movie = (props) => {
         }
         getData();
         getRecommendation();
-    }, []);
+    }, [props.data.id]);
 
     return (
         <>
             <div style={{
                 "float": "right",
             }}>
-                <Button onClick={props.close}><AiFillCloseCircle /></Button>
+                <Button onClick={() => { props.close(false) }}><AiFillCloseCircle /></Button>
             </div>
             <div>
-
+                {console.log(props.data)}
             </div>
-            {/* <BackdropImage src={"https://image.tmdb.org/t/p/w500/   " + movieData.backdrop_path} /> */}
+
             <MovieDetails>
                 <BackdropImage src={"https://image.tmdb.org/t/p/w500/" + movieData.backdrop_path} />
                 <PosterImage src={"https://image.tmdb.org/t/p/w500/" + movieData.poster_path} />
