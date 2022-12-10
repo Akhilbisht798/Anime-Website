@@ -12,6 +12,7 @@ const MovieWrapper = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.2em;
+  margin: 7px;
 `
 
 const MovieDiv = styled.div`

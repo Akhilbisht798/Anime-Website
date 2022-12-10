@@ -26,6 +26,7 @@ const MovieDetails = styled.div`
     justify-content: center;
     gap: 1.2em;
     border-radius: 7px;
+    margin: 10px;
     @media (max-width: 490px) {
         flex-wrap: wrap;
     }
@@ -50,6 +51,7 @@ const MovieWrapper = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.2em;
+  margin: 13px;
 `
 
 const MovieDiv = styled.div`

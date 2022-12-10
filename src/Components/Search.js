@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Movie from "./Movie";
 import styled from "styled-components";
-import { AiFillStar } from "react-icons/ai"
+import { AiFillStar, AiFillHome } from "react-icons/ai"
 import { v4 } from "uuid";
 
 const MovieWrapper = styled.div`
@@ -10,6 +10,7 @@ const MovieWrapper = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.2em;
+  padding: 15px;
 `
 
 const MovieDiv = styled.div`
@@ -52,7 +53,7 @@ const Search = (props) => {
 
     return (
         <>
-            <button onClick={props.close} >Close</button>
+            <AiFillHome onClick={props.close} size="20" cursor="pointer" />
             {!openMovie ?
                 <MovieWrapper>
                     {props.data.map((curr) => {
