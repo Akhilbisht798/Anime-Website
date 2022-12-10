@@ -1,120 +1,42 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { v4 } from "uuid";
-import { AiFillStar } from "react-icons/ai"
-import { ScaleLoader } from "react-spinners"
-import Movie from "./Components/Movie";
-
-const MovieWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.2em;
-`
-
-const MovieDiv = styled.div`
-  width: 240px;
-  height: 400px;
-  border: 2px solid black;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 95%;
-`
-
+import React, { useState, useEffect } from "react";
+import Home from "./Components/Home";
+import Search from "./Components/Search";
+import User from "./Components/UserAuth";
+import { auth } from "./firebase-config";
 
 const App = () => {
 
-  const [trendingList, setTrendingList] = useState([]);
-  const [currPage, setCurrpage] = useState(() => 1);
-  const [totalResults, setTotalResults] = useState(() => 0)
-  const [openMovie, setOpenMovie] = useState(() => false);
-  const [selectedMovie, setSelectedMovie] = useState({})
+  const [search, setSearch] = useState("");
+  const [openSearch, setOpenSearch] = useState(() => false);
+  const [searchRes, setSearchRes] = useState([])
 
-  const getTrending = async (pageParam = 1) => [
-    fetch("https://api.themoviedb.org/3/trending/all/day?api_key=" + process.env.REACT_APP_MOVIE_DB
-      + "&page=" + pageParam)
-      .then(response => response.json())
-
-      .then(response => {
-        let array = trendingList.concat(response.results)
-        setTrendingList(array);
-        if (pageParam === 1) setTotalResults(response.total_results);
-      })
-  ]
-
-  const fetchMoreData = () => {
-    getTrending(currPage + 1);
-    setCurrpage(currPage + 1);
+  const searchMovie = async () => {
+    const link = "https://api.themoviedb.org/3/search/multi?api_key=" + process.env.REACT_APP_MOVIE_DB +
+      "&language=en-US&query=" + search + "&page=1&include_adult=true";
+    fetch(link).then(response => response.json())
+      .then(response => setSearchRes(response.results))
   }
 
-  const MovieOrNot = (obj) => {
-    return obj.hasOwnProperty("original_title");
+  const closeSearch = () => {
+    setOpenSearch(false);
   }
 
-  const changeSelectedMovie = (id, show) => {
-    setSelectedMovie({ id: id, movie: show })
+  const onSearchHandle = async (e) => {
+    e.preventDefault();
+    searchMovie();
+    setOpenSearch(true);
   }
-
-  const onClickHandle = (e) => {
-    const movie = e.target.dataset.show;
-    const id = e.target.dataset.id;
-    setSelectedMovie({ id: id, movie: movie });
-    setOpenMovie(true);
-  }
-
-  const closeMovie = (bool) => {
-    setOpenMovie(bool);
-  }
-
-  useEffect(() => {
-    getTrending(1);
-  }, [])
 
   return (
-    <div>
-      {!openMovie ?
-        <InfiniteScroll
-          dataLength={trendingList.length}
-          next={fetchMoreData}
-          hasMore={totalResults !== trendingList.length}
-          loader={<ScaleLoader />}
-          endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
-        >
-          <MovieWrapper>
-            {trendingList.map((curr) => {
-              const a = MovieOrNot(curr);
-              const imgLink = "https://image.tmdb.org/t/p/w500/";
-              return (
-                <MovieDiv key={v4()}
-                  data-show={a}
-                  data-id={curr.id}
-                  onClick={(e) => onClickHandle(e)}>
-                  <Image src={imgLink + curr.poster_path}
-                    data-show={a}
-                    data-id={curr.id} />
-                  <p data-show={a}
-                    data-id={curr.id}>{curr.original_title}{curr.original_name}</p>
-                  <p data-show={a}
-                    data-id={curr.id}><AiFillStar color="#f5c518" /> {curr.vote_average}</p>
-                </MovieDiv >
-              )
-            })}
-          </MovieWrapper>
-        </InfiniteScroll> :
-        <Movie data={selectedMovie} close={closeMovie} changeMovie={changeSelectedMovie} />
+    <>
+      <form onSubmit={(e) => { onSearchHandle(e) }}>
+        <input type="text" placeholder="Search..." onChange={(e) => { setSearch(e.target.value) }} required />
+        <button type="submit">Submit</button>
+      </form>
+      {openSearch ? <Search data={searchRes} close={closeSearch} /> :
+        <Home />
       }
-    </div>
+    </>
   )
 }
 
