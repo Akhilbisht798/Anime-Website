@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AiFillCloseCircle } from "react-icons/ai"
 import { GoPrimitiveDot } from "react-icons/go"
-import { AiFillStar } from "react-icons/ai"
+import { AiFillStar, AiFillEyeInvisible } from "react-icons/ai"
 import { v4 } from "uuid";
-
+import { BsFillEyeFill } from "react-icons/bs"
+import { auth, db } from "../firebase-config"
+import { collection, getDoc, setDoc, doc, deleteDoc } from "firebase/firestore"
 
 const Button = styled.button`
     background: none;
@@ -68,16 +70,13 @@ const Movie = (props) => {
 
     const [movieData, setMovieData] = useState({});
     const [recommendations, setRecommendation] = useState([]);
+    const [watched, setWatched] = useState(() => false);
 
     const getRecommendation = () => {
         let show = props.data.movie === "true" ? "movie" : "tv";
         const link = "https://api.themoviedb.org/3/" + show + "/" + props.data.id +
             "/recommendations?api_key=" + process.env.REACT_APP_MOVIE_DB + "&language=en-US&page=1";
         fetch(link).then(response => response.json())
-            .then(response => {
-                console.log(response);
-                return response;
-            })
             .then(response => setRecommendation(response.results))
     }
 
@@ -91,6 +90,39 @@ const Movie = (props) => {
         props.changeMovie(id, movie);
     }
 
+    const hasWatched = async () => {
+        const docRef = doc(db, "users", auth.currentUser.uid, "Watched", props.data.id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            setWatched(true);
+            return;
+        }
+        setWatched(false);
+    }
+
+    const addToWatched = async () => {
+        try {
+            const Watched = collection(db, "users", auth.currentUser.uid, "Watched");
+            await setDoc(doc(Watched, props.data.id), {
+                id: props.data.id,
+                show: props.data.movie == "true" ? true : false
+            });
+            setWatched(true);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const removeWatched = async () => {
+        try {
+            await deleteDoc(doc(db, "users", auth.currentUser.uid, "Watched", props.data.id));
+            setWatched(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         const getData = async () => {
             let show = props.data.movie === "true" ? "movie" : "tv";
@@ -101,6 +133,7 @@ const Movie = (props) => {
         }
         getData();
         getRecommendation();
+        hasWatched();
     }, [props.data.id]);
 
     return (
@@ -109,9 +142,6 @@ const Movie = (props) => {
                 "float": "right",
             }}>
                 <Button onClick={() => { props.close(false) }}><AiFillCloseCircle /></Button>
-            </div>
-            <div>
-                {console.log(props.data)}
             </div>
 
             <MovieDetails>
@@ -134,7 +164,10 @@ const Movie = (props) => {
                         <p> <AiFillStar color="#f5c518" /> {movieData.vote_average}</p>
                     </div>
                     <div>
-                        {/* for Watched buttons and Add to favorite list etc */}
+                        {watched ? < BsFillEyeFill cursor="pointer" onClick={removeWatched} /> :
+
+                            <AiFillEyeInvisible cursor="pointer" onClick={addToWatched} />
+                        }
                     </div>
                     <div>
                         <p>{movieData.tagline}</p>
