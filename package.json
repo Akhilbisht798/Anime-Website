@@ -12,6 +12,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-query": "^3.39.2",
     "react-router": "^6.4.4",
     "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
@@ -43,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "axios": "^1.2.1"
   }
 }

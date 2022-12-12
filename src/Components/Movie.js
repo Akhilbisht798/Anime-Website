@@ -143,7 +143,7 @@ const Movie = (props) => {
             <div style={{
                 "float": "right",
             }}>
-                <Button onClick={() => { props.close(false) }}><AiFillCloseCircle /></Button>
+                <Button onClick={() => { props.close(false) }}><AiFillCloseCircle size="20" /></Button>
             </div>
 
             <MovieDetails>

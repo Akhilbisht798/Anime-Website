@@ -7,6 +7,7 @@ import { signOut } from "firebase/auth"
 import styled from "styled-components";
 import "./app.css"
 import { BiLogOut } from "react-icons/bi"
+import UserPage from "./Components/UserPage";
 
 const Header = styled.div`
   background-color: #222;
@@ -17,6 +18,9 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 13px;
+  position: sticky;
+  top: 0; 
+  left: 0;
 `
 
 const Form = styled.form`
@@ -59,6 +63,9 @@ const Header2Div = styled.div`
   flex-wrap: wrap;
   gap: 1.2em;
 `
+const UserEmail = styled.div`
+  cursor: pointer;
+`
 
 const App = () => {
 
@@ -66,6 +73,7 @@ const App = () => {
   const [openSearch, setOpenSearch] = useState(() => false);
   const [searchRes, setSearchRes] = useState([]);
   const [user, setUser] = useState(() => false);
+  const [openUser, setOpenUser] = useState(() => false);
 
   const searchMovie = async () => {
     const link = "https://api.themoviedb.org/3/search/multi?api_key=" + process.env.REACT_APP_MOVIE_DB +
@@ -76,6 +84,10 @@ const App = () => {
 
   const closeSearch = () => {
     setOpenSearch(false);
+  }
+
+  const closeUser = () => {
+    setOpenUser(false);
   }
 
   const onSearchHandle = async (e) => {
@@ -101,12 +113,14 @@ const App = () => {
         </Form>
         {!user ? <User changeUser={changeUser} /> :
           <Header2Div>
-            <p>{auth.currentUser?.email}</p>
+            <UserEmail onClick={() => { setOpenUser(true) }}>{auth.currentUser?.email}</UserEmail>
             <BiLogOut onClick={logOut} cursor="pointer" />
           </Header2Div>}
       </Header>
-      {openSearch ? <Search data={searchRes} close={closeSearch} /> :
-        <Home />
+      {openUser ? <UserPage close={closeUser} /> :
+        (openSearch ? <Search data={searchRes} close={closeSearch} /> :
+          <Home />
+        )
       }
     </>
   )
