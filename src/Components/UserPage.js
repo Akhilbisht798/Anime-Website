@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { auth, db } from "../firebase-config"
-import { AiFillCloseCircle } from "react-icons/ai"
+import { AiFillHome } from "react-icons/ai"
 import { collection, getDocs } from "firebase/firestore";
 import styled from "styled-components";
 import { v4 } from "uuid";
@@ -127,7 +127,7 @@ const Inner = (props) => {
             <div style={{
                 "float": "right",
             }}>
-                <AiFillCloseCircle onClick={props.close} size="20" cursor="pointer" />
+                <AiFillHome onClick={props.close} size="20" cursor="pointer" />
             </div>
             {openMovie ? <Movie data={selectedMovie} close={closeMovie} changeMovie={changeSelectedMovie} /> :
                 <>
