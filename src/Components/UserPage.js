@@ -82,7 +82,6 @@ const Inner = (props) => {
     const { isError, isSuccess, isLoading, data, error } = useQuery(
         ["movies"],
         getWatched,
-        { staleTime: 60000 }
     );
 
     const MovieOrNot = (obj) => {
