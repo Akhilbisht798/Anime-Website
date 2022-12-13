@@ -15,6 +15,8 @@ const MovieWrapper = styled.div`
   flex-wrap: wrap;
   gap: 1.2em;
   margin: 13px;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 1.2em;
 `
 
 const MovieDiv = styled.div`
@@ -36,8 +38,17 @@ const queryClient = new QueryClient();
 export default function UserPage(props) {
     return (
         <QueryClientProvider client={queryClient}>
+            <UserDetails />
             <Inner close={props.close} />
         </QueryClientProvider>
+    )
+}
+
+const UserDetails = (props) => {
+    return (
+        <h1>
+            {auth.currentUser.email}
+        </h1>
     )
 }
 

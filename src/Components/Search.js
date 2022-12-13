@@ -53,7 +53,12 @@ const Search = (props) => {
 
     return (
         <>
-            <AiFillHome onClick={props.close} size="20" cursor="pointer" />
+            <div style={{
+                "float": "right",
+            }}>
+                <AiFillHome onClick={props.close} size="20" cursor="pointer" />
+            </div>
+            <h3>Search Results.</h3>
             {!openMovie ?
                 <MovieWrapper>
                     {props.data.map((curr) => {
