@@ -7,7 +7,7 @@ import { v4 } from "uuid";
 import { BsFillEyeFill } from "react-icons/bs"
 import { auth, db } from "../firebase-config"
 import { collection, getDoc, setDoc, doc, deleteDoc } from "firebase/firestore"
-import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai"
 
 const Button = styled.button`
     background: none;
@@ -105,6 +105,17 @@ const Movie = (props) => {
         setWatched(false);
     }
 
+    const hasRecommend = async () => {
+        const docRef = doc(db, "users", auth.currentUser.uid, "Recommend", props.data.id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            setIsRecommended(true);
+            return;
+        }
+        setIsRecommended(false);
+    }
+
     const addToWatched = async () => {
         try {
             const Watched = collection(db, "users", auth.currentUser.uid, "Watched");
@@ -160,6 +171,7 @@ const Movie = (props) => {
         getData();
         getRecommendation();
         hasWatched();
+        hasRecommend();
     }, [props.data.id]);
 
     return (
@@ -194,8 +206,8 @@ const Movie = (props) => {
 
                             <AiFillEyeInvisible cursor="pointer" onClick={addToWatched} />
                         }
-                        {isRecommended ? <IoMdAddCircle cursor="pointer" onClick={RemoveFromRecommend} /> :
-                            <IoMdAdd cursor="pointer" onClick={AddToRecommend} />
+                        {isRecommended ? <AiFillHeart cursor="pointer" onClick={RemoveFromRecommend} /> :
+                            <AiOutlineHeart cursor="pointer" onClick={AddToRecommend} />
                         }
                     </div>
                     <div>
