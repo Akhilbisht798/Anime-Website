@@ -7,6 +7,7 @@ import { v4 } from "uuid";
 import { BsFillEyeFill } from "react-icons/bs"
 import { auth, db } from "../firebase-config"
 import { collection, getDoc, setDoc, doc, deleteDoc } from "firebase/firestore"
+import { IoMdAdd, IoMdAddCircle } from "react-icons/io";
 
 const Button = styled.button`
     background: none;
@@ -73,6 +74,7 @@ const Movie = (props) => {
     const [movieData, setMovieData] = useState({});
     const [recommendations, setRecommendation] = useState([]);
     const [watched, setWatched] = useState(() => false);
+    const [isRecommended, setIsRecommended] = useState(() => false);
 
     const getRecommendation = () => {
         let show = props.data.movie === "true" ? "movie" : "tv";
@@ -125,6 +127,28 @@ const Movie = (props) => {
         }
     }
 
+    const AddToRecommend = async () => {
+        try {
+            const Recommend = collection(db, "users", auth.currentUser.uid, "Recommend");
+            await setDoc(doc(Recommend, props.data.id), {
+                id: props.data.id,
+                show: props.data.movie == "true" ? true : false
+            });
+            setIsRecommended(true);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const RemoveFromRecommend = async () => {
+        try {
+            await deleteDoc(doc(db, "users", auth.currentUser.uid, "Recommend", props.data.id));
+            setIsRecommended(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         const getData = async () => {
             let show = props.data.movie === "true" ? "movie" : "tv";
@@ -169,6 +193,9 @@ const Movie = (props) => {
                         {watched ? < BsFillEyeFill cursor="pointer" onClick={removeWatched} /> :
 
                             <AiFillEyeInvisible cursor="pointer" onClick={addToWatched} />
+                        }
+                        {isRecommended ? <IoMdAddCircle cursor="pointer" onClick={RemoveFromRecommend} /> :
+                            <IoMdAdd cursor="pointer" onClick={AddToRecommend} />
                         }
                     </div>
                     <div>
