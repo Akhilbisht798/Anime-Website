@@ -24,6 +24,10 @@ const FormDiv = styled.div`
     border-radius: 20px;
     color: #eee;
     padding: 0.6em;
+    @media (max-width: 820px) {
+        width: 100%;
+        height: 100%;
+    }
 `
 
 const Form = styled.form`
@@ -36,15 +40,19 @@ const Form = styled.form`
 
 const Input = styled.input`
     background-color: #303245;
-  border-radius: 12px;
-  border: 0;
-  box-sizing: border-box;
-  color: #eee;
-  font-size: 18px;
-  height: 100%;
-  outline: 0;
-  padding: 4px 20px 0;
-  width: 50%;
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #eee;
+    font-size: 18px;
+    height: 100%;
+    outline: 0;
+    padding: 4px 20px 0;
+    width: 70%;
+    @media (max-width: 820px) {
+          width: 100%;
+          height: 100%;
+      }
 `
 
 const SubmitButton = styled.button`
